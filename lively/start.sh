@@ -17,4 +17,4 @@ docker run \
     -p 9002:9002 \
     -p 9003:9003 \
     -p 9004:9004 \
-    $container_name
+    -t -i $container_name
