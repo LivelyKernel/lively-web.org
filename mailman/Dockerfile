@@ -27,6 +27,8 @@ RUN a2ensite mailman
 RUN /etc/init.d/apache2 stop
 #RUN /etc/init.d/apache2 restart
 
+RUN apt-get -y install multitail
+
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 
@@ -35,4 +37,4 @@ EXPOSE 25
 
 CMD service mailman start; \
     service apache2 start; \
-    /bin/bash
+    multitail -q 1 --mergeall /var/log/mailman/* --mergeall /var/log/apache2/*log
