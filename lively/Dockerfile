@@ -4,11 +4,19 @@ MAINTAINER    Robert Krahn <robert.krahn@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
 RUN apt-get upgrade -y
-RUN apt-get -y install curl git bzip2 unzip
+RUN apt-get -y install curl git bzip2 unzip zip
 RUN apt-get install lsof
 
 # lively user
-RUN /usr/sbin/useradd --create-home --home-dir /home/lively --shell /bin/bash lively
+RUN /usr/sbin/useradd \
+    --create-home --home-dir /home/lively \
+     --shell /bin/bash \
+     --groups sudo \
+     --password niHEcdDiD3J1o \
+     lively
+
+# git
+ADD gitconfig /home/lively/.gitconfig
 
 # nodejs tooling
 RUN npm install -g node-inspector
@@ -28,4 +36,4 @@ EXPOSE 9003
 EXPOSE 9004
 
 CMD rm *.pid; \
-    npm start
+    node bin/lk-server -p 9001 --behind-proxy
