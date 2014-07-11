@@ -1,0 +1,74 @@
+# see http://theheat.dk/blog/?p=1023
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# 1. configure CA
+
+export cnf=/usr/lib/ssl/openssl.cnf
+export ca_loc=/home/lively/lively-web.org/http/ssl/myCA
+
+mkdir -p $ca_loc/certs
+mkdir $ca_loc/csr
+mkdir $ca_loc/newcerts
+mkdir $ca_loc/private
+cp $cnf $ca_loc/.
+cd $ca_loc
+echo 00 > serial
+echo 00 > crlnumber
+touch index.txt
+
+# Change the dir parameter in openssl.cnf to $ca_loc. Check it.
+
+grep $ca_loc openssl.cnf
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# 2. create CA
+
+# Create CA private key
+export password="foobar"
+openssl genrsa -des3 -passout pass:$password -out  private/rootCA.key 2048
+ 
+# Remove passphrase 
+openssl rsa -passin pass:$password -in private/rootCA.key -out private/rootCA.key
+ 
+# Create CA self-signed certificate
+openssl req -config openssl.cnf -new -x509 -subj '/C=US/L=CA/O=livelyweb-internal CA/CN=lively-web.org' -days 999 -key private/rootCA.key -out certs/rootCA.crt
+
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# 3. Create a SSL Server certificate
+
+# Create private key for the winterfell server
+export servername="internal"
+openssl genrsa -des3 -passout pass:$password -out private/$servername.key 2048
+ 
+# Remove passphrase 
+openssl rsa -passin pass:$password -in private/$servername.key -out private/$servername.key
+ 
+# Create CSR for the winterfell server
+openssl req -config openssl.cnf -new -subj '/C=US/L=SanFrancisco/O=livelyweb-internal/CN=internal.lively-web.org' -key private/$servername.key -out csr/$servername.csr
+ 
+# Create certificate for the $servername server
+openssl ca -batch -config openssl.cnf -days 999 -in csr/$servername.csr -out certs/$servername.crt -keyfile private/rootCA.key -cert certs/rootCA.crt -policy policy_anything
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+# 4. Create a SSL Client certificate
+# Create private key for a client
+openssl genrsa -des3 -passout pass:$password -out private/client.key 2048
+ 
+# Remove passphrase 
+openssl rsa -passin pass:$password -in private/client.key -out private/client.key
+ 
+# Create CSR for the client.
+openssl req -config openssl.cnf -new -subj '/C=US/L=SanFrancisco/O=livelyweb-internal/CN=client-robert' -key private/client.key -out csr/client.csr
+ 
+# Create client certificate.
+openssl ca -batch -config openssl.cnf -days 999 -in csr/client.csr -out certs/client.crt -keyfile private/rootCA.key -cert certs/rootCA.crt -policy policy_anything
+
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# 5. Export the client certificate to pkcs12
+openssl pkcs12 -export -passout pass:$password -in certs/client.crt -inkey private/client.key -certfile certs/rootCA.crt -out certs/clientcert.p12
+
