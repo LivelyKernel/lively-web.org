@@ -12,9 +12,10 @@ docker_procs=$(docker ps | grep ":$port" | awk '{ print $1 }')
 [ -z "$(docker ps -a | grep $container_name)" ] && docker build --rm -t $container_name .
 
 docker run \
+    --rm \
     -v $lively_host_dir:/home/lively/LivelyKernel \
     -p 8080:9001 \
     -p 9002:9002 \
     -p 9003:9003 \
     -p 9004:9004 \
-    $container_name
+    -i -t $container_name
