@@ -22,6 +22,12 @@ ADD gitconfig /home/lively/.gitconfig
 RUN npm install -g node-inspector
 RUN npm install forever -g
 
+# FIXME 2014-08-12: adding R server for Aran,
+# this should really go into its own VM
+RUN apt-get install -y --no-install-recommends r-base 
+RUN apt-get install -y --no-install-recommends r-base-dev 
+
+
 # lively
 ENV WORKSPACE_LK /home/lively/LivelyKernel
 ENV HOME /home/lively
