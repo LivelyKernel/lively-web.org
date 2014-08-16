@@ -42,11 +42,11 @@
                (vinyasa.inject/in
                 clojure.core
                 ;; [rksm.repl.utils lein search-for-symbol get-stack print-stack dumb-stack traced-fn]
-                [vinyasa.pull [pull >pull]]
-                [clojure.java.shell [sh >sh]]
-                [clojure.repl apropos [dir >dir] [doc >doc] [find-doc >find-doc] [source >source] [root-cause >cause]]
-                [clojure.tools.namespace.repl [refresh >refresh]]
-                [clojure.pprint [pprint >pprint]]
+                [vinyasa.pull pull]
+                [clojure.java.shell sh]
+                [clojure.repl apropos dir doc find-doc source root-cause]
+                [clojure.tools.namespace.repl refresh]
+                [clojure.pprint pprint]
                 [iroh.core .% .%> .*]
                 ;; [clojure.tools.trace dotrace trace-ns untrace-ns]
                 )]}}
