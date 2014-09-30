@@ -7,13 +7,9 @@ container_name=lively-clojure
 clojure_project_dir=$PWD/lively-clojure
 lively_project_dir=$PWD/LivelyKernel
 
-if [[ ! -d $clojure_project_dir ]]; then
-  git clone https://github.com/LivelyKernel/lively-clojure $clojure_project_dir;
-fi
-
 if [[ ! -d $lively_project_dir ]]; then
   git clone https://github.com/LivelyKernel/LivelyKernel $lively_project_dir;
-  ln -s $clojure_project_dir/resources/clojure-workspace.html $lively_project_dir/clojure-workspace.html
+  cp clojure-workspace.html $lively_project_dir/
 fi
 
 docker_procs=$(docker ps | grep ":$port" | awk '{ print $1 }')
@@ -26,13 +22,16 @@ docker run \
     --rm \
     -v $clojure_project_dir:/home/lively/clojure-om \
     -v $lively_project_dir:/home/lively/LivelyKernel \
+    -p 7888:7888 \
+    -p 7889:7889 \
+    -p 9050:9050 \
     -p 9080:9080 \
     -p 9081:9081 \
     -p 9082:9082 \
     -p 9083:9083 \
     -p 9084:9084 \
+    -t \
     $container_name
-    # -i -t \
     # $container_name /bin/bash --login
 
 echo "[$(date -R)] Docker exited with $?"

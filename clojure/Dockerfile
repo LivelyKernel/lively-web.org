@@ -26,8 +26,11 @@ ADD profiles.clj $HOME/.lein/profiles.clj
 
 ENV PATH $HOME/bin:$PATH
 
-EXPOSE 9080
-EXPOSE 9081
+EXPOSE 7888 # default clojure nREPL port
+EXPOSE 7889 # clojure nREPL port used for cljs connection
+EXPOSE 9050 # cljs nREPL / piggieback port to connect to browser
+EXPOSE 9080 # Lively runs here
+EXPOSE 9081 # Clojure http server runs here
 EXPOSE 9082
 EXPOSE 9083
 EXPOSE 9084
