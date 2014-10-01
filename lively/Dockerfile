@@ -27,6 +27,8 @@ RUN npm install forever -g
 RUN apt-get install -y --no-install-recommends r-base 
 RUN apt-get install -y --no-install-recommends r-base-dev 
 
+RUN apt-get install -y dnsutils
+
 
 # lively
 ENV WORKSPACE_LK /home/lively/LivelyKernel
