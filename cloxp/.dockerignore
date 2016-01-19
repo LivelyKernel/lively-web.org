@@ -1,0 +1,6 @@
+.git
+./docker-cloxp-proxy
+./clojure
+./cloxp
+./m2
+./start.sh

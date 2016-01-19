@@ -19,7 +19,8 @@
 /cloxp/clojure
 /cloxp/logs
 /cloxp/m2
+/cloxp/docker-workspaces
 
-/dans-workspace/LivelyKernel/
+/dans-workspace/LivelyKernel
 /opencv/
-/undoredo//LivelyKernel/
+/undoredo//LivelyKernel
