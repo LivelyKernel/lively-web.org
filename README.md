@@ -12,4 +12,4 @@ Consists currently out of
 - `lively` docker setup for running a LiveyWeb
 - `mailman` currently unused docker mailman setup
 - `logs`: where supervisor puts the log files *not part of the repo*
-- `data`: hast a `LivelyKernel/` sub folder used by livey docker *not part of the repo*
+- `data`: has a `LivelyKernel/` sub folder used by livey docker *not part of the repo*
